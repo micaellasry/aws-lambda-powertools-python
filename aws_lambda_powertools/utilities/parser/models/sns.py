@@ -3,10 +3,9 @@ from typing import Dict, List, Optional
 from typing import Type as TypingType
 from typing import Union
 
+from aws_lambda_powertools.utilities.parser.types import Literal
 from pydantic import BaseModel, root_validator
 from pydantic.networks import HttpUrl
-
-from aws_lambda_powertools.utilities.parser.types import Literal
 
 
 class SnsMsgAttributeModel(BaseModel):
@@ -17,15 +16,15 @@ class SnsMsgAttributeModel(BaseModel):
 class SnsNotificationModel(BaseModel):
     Subject: Optional[str]
     TopicArn: str
-    UnsubscribeUrl: HttpUrl
+    UnsubscribeUrl: Optional[HttpUrl]
     Type: Literal["Notification"]
     MessageAttributes: Optional[Dict[str, SnsMsgAttributeModel]]
     Message: Union[str, TypingType[BaseModel]]
     MessageId: str
-    SigningCertUrl: HttpUrl
-    Signature: str
+    SigningCertUrl: Optional[HttpUrl]
+    Signature: Optional[str]
     Timestamp: datetime
-    SignatureVersion: str
+    SignatureVersion: Optional[str]
 
     @root_validator(pre=True, allow_reuse=True)
     def check_sqs_protocol(cls, values):
